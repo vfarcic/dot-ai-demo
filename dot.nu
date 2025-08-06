@@ -32,6 +32,7 @@ def "main setup" [] {
             --enable-dot-ai true
             --anthropic-api-key $anthropic_data.token
             --kubeconfig "./kubeconfig.yaml"
+            --dot-ai-version "0.49.0"
     )
 
     main print source
