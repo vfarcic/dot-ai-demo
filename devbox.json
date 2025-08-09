@@ -9,7 +9,9 @@
     "kubectl@1.33.2"
   ],
   "shell": {
-    "init_hook": [],
+    "init_hook": [
+      "export PATH=$PATH:$HOME/.npm-global/bin"
+    ],
     "scripts":   {}
   }
 }

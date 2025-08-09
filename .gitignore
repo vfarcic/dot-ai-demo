@@ -1,7 +1,7 @@
 kubeconfig*.yaml
-.mcp.json
 .env
 tmp/*
 !tmp/sessions/
 tmp/sessions/*
 !tmp/sessions/empty
+qdrant_storage/
