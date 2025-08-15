@@ -4,7 +4,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "--package=@vfarcic/dot-ai@0.52.0",
+        "--package=@vfarcic/dot-ai@0.67.0",
         "dot-ai-mcp"
       ],
       "env": {

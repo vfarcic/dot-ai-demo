@@ -9,20 +9,6 @@ source scripts/anthropic.nu
 
 def main [] {}
 
-def "main build-image" [version: string] {
-    
-    let repo = "ghcr.io/vfarcic/dot-ai-demo/qdrant"
-    
-    print $"Building qdrant image with version ($version)..."
-    docker build --tag $"($repo):($version)" --tag $"($repo):latest" .
-    
-    print $"Pushing qdrant image..."
-    docker push $"($repo):($version)"
-    docker push $"($repo):latest"
-    
-    print $"Image pushed successfully: ($repo):($version) and ($repo):latest"
-}
-
 def "main setup" [--qdrant-tag: string = "latest"] {
     
     rm --force .env
@@ -50,10 +36,7 @@ def "main setup" [--qdrant-tag: string = "latest"] {
 
     main apply ingress nginx --provider kind
 
-    (
-        main apply crossplane --preview true
-            --app-config true --db-config true
-    )
+    main apply crossplane --app-config true --db-config true
 
     kubectl create namespace a-team
 
