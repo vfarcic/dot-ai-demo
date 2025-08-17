@@ -1,16 +1,16 @@
 {
   "mcpServers": {
     "dot-ai": {
-      "command": "npx",
+      "command": "docker",
       "args": [
-        "-y",
-        "--package=@vfarcic/dot-ai@0.67.0",
-        "dot-ai-mcp"
-      ],
-      "env": {
-        "KUBECONFIG": "./kubeconfig.yaml",
-        "DOT_AI_SESSION_DIR": "./tmp/sessions"
-      }
+        "compose", 
+        "-f",
+        "docker-compose-dot-ai.yaml",
+        "run", 
+        "--rm",
+        "--remove-orphans",
+        "dot-ai"
+      ]
     }
   }
 }
