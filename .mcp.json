@@ -6,6 +6,8 @@
         "compose", 
         "-f",
         "docker-compose-dot-ai.yaml",
+        "-p",
+        "dot-ai-demo",
         "run", 
         "--rm",
         "--remove-orphans",
