@@ -7,12 +7,13 @@ source scripts/ingress.nu
 source scripts/mcp.nu
 source scripts/anthropic.nu
 source scripts/kyverno.nu
+source scripts/atlas.nu
 
 def main [] {}
 
 def "main setup" [
     --dot-ai-tag: string = "latest",
-    --qdrant-run: bool = true,
+    --qdrant-run = true,
     --qdrant-tag: string = "latest"
 ] {
     
@@ -41,7 +42,7 @@ def "main setup" [
 
     docker image pull $dot_ai_image
 
-    if not $qdrant_run {(
+    if $qdrant_run {(
         docker container run --detach --name qdrant
             --publish 6333:6333 $qdrant_image
     )}
@@ -55,6 +56,8 @@ def "main setup" [
     main apply crossplane --app-config true --db-config true
 
     main apply kyverno
+
+    main apply atlas
 
     kubectl create namespace a-team
 
@@ -71,6 +74,8 @@ def "main destroy" [] {
     main destroy kubernetes kind
 
     docker container rm qdrant --force
+
+    docker volume rm qdrant-data
 
 }
 
