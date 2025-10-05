@@ -180,6 +180,9 @@ spec:
         - containerPort: 8080
 ' | kubectl apply --filename -
 
+# Replace [...] with your OpenAPI API key.
+export OPENAI_API_KEY=[...]
+
 echo "
 apiVersion: apps/v1
 kind: Deployment
