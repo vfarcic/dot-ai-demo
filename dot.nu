@@ -57,7 +57,7 @@ def "main setup" [
 
     (
         main apply crossplane --app-config true --db-config true
-            --providder $crossplane_provider
+            --provider $crossplane_provider
             --db-config $crossplane_db_config
     )
 
