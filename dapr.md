@@ -22,7 +22,9 @@ FIXME: Switch to newer tags
 
 ```sh
 ./dot.nu setup --dot-ai-tag 0.105.0 \
-    --qdrant-run false --qdrant-tag 0.5.0
+    --qdrant-run false --qdrant-tag 0.5.0 \
+    --crossplane-provider aws \
+    --crossplane-db-config true
 
 source .env
 ```

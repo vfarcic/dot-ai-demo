@@ -15,6 +15,7 @@ def "main setup" [
     --dot-ai-tag: string = "latest",
     --qdrant-run = true,
     --qdrant-tag: string = "latest",
+    --crossplane-provider = none,    # Which provider to use. Available options are `none`, `google`, `aws`, and `azure`
     --crossplane-db-config = false   # Whether to apply DOT SQL Crossplane Configuration
 ] {
     
@@ -56,6 +57,7 @@ def "main setup" [
 
     (
         main apply crossplane --app-config true --db-config true
+            --providder $crossplane_provider
             --db-config $crossplane_db_config
     )
 
