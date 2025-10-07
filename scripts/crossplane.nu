@@ -27,7 +27,7 @@ def --env "main apply crossplane" [
     (
         helm upgrade --install crossplane "crossplane/crossplane"
             --namespace crossplane-system --create-namespace
-            --set args='{"--enable-usages"}'
+            --set provider.defaultActivations={"*.m.upbound.io", "*.m.crossplane.io"}
             --wait
     )
 
@@ -200,7 +200,7 @@ def --env "main apply crossplane" [
             kind: "Provider"
             metadata: { name: "crossplane-provider-helm" }
             spec: {
-                package: "xpkg.upbound.io/crossplane-contrib/provider-helm:v0.19.0"
+                package: "xpkg.upbound.io/crossplane-contrib/provider-helm:v1.0.0"
                 runtimeConfigRef: { name: "crossplane-provider-helm" }
             }
         } | to yaml | kubectl apply --filename -
@@ -248,7 +248,7 @@ def --env "main apply crossplane" [
             kind: "Provider"
             metadata: { name: "crossplane-provider-kubernetes" }
             spec: {
-                package: "xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.15.0"
+                package: "xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v1.0.0"
                 runtimeConfigRef: { name: "crossplane-provider-kubernetes" }
             }
         } | to yaml | kubectl apply --filename -
@@ -402,8 +402,8 @@ def "apply providerconfig" [
     if $provider == "google" {
 
         {
-            apiVersion: "gcp.upbound.io/v1beta1"
-            kind: "ProviderConfig"
+            apiVersion: "gcp.m.upbound.io/v1beta1"
+            kind: "ClusterProviderConfig"
             metadata: { name: "default" }
             spec: {
                 projectID: $google_project_id
@@ -421,8 +421,8 @@ def "apply providerconfig" [
     } else if $provider == "aws" {
 
         {
-            apiVersion: "aws.upbound.io/v1beta1"
-            kind: "ProviderConfig"
+            apiVersion: "aws.m.upbound.io/v1beta1"
+            kind: "ClusterProviderConfig"
             metadata: { name: default }
             spec: {
                 credentials: {
@@ -439,8 +439,8 @@ def "apply providerconfig" [
     } else if $provider == "azure" {
 
         {
-            apiVersion: "azure.upbound.io/v1beta1"
-            kind: "ProviderConfig"
+            apiVersion: "azure.m.upbound.io/v1beta1"
+            kind: "ClusterProviderConfig"
             metadata: { name: default }
             spec: {
                 credentials: {
