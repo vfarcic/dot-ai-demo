@@ -23,6 +23,8 @@ FIXME: Switch to newer tags
 ```sh
 ./dot.nu setup --dot-ai-tag 0.105.0 \
     --qdrant-run false --qdrant-tag 0.5.0
+
+source .env
 ```
 
 FIXME: Add to `dot.nu`
@@ -63,6 +65,12 @@ helm upgrade --install postgresql \
     --set "global.postgresql.auth.postgresPassword=postgres" \
     --set "primary.persistence.size=1Gi" \
     --set "image.repository=bitnamilegacy/postgresql"
+
+# Deploy PostgreSQL in AWS
+# There should be database `dapr` inside PostgreSQL server and both the user and the password should be `postgres`
+# Select XRD
+
+# FIXME: Test without XRD
 
 helm upgrade --install kafka \
     oci://registry-1.docker.io/bitnamicharts/kafka \
@@ -179,9 +187,6 @@ spec:
         ports:
         - containerPort: 8080
 ' | kubectl apply --filename -
-
-# Replace [...] with your OpenAPI API key.
-export OPENAI_API_KEY=[...]
 
 echo "
 apiVersion: apps/v1
@@ -308,4 +313,9 @@ open "http://localhost:8080"
 source .env
 
 claude
+```
+
+[user]
+```text
+Deploy PostgreSQL in AWS
 ```
