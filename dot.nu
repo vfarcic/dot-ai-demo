@@ -14,7 +14,9 @@ def main [] {}
 def "main setup" [
     --dot-ai-tag: string = "latest",
     --qdrant-run = true,
-    --qdrant-tag: string = "latest"
+    --qdrant-tag: string = "latest",
+    --crossplane-provider = none,    # Which provider to use. Available options are `none`, `google`, `aws`, and `azure`
+    --crossplane-db-config = false   # Whether to apply DOT SQL Crossplane Configuration
 ] {
     
     rm --force .env
@@ -53,7 +55,11 @@ def "main setup" [
 
     main apply ingress nginx --provider kind
 
-    main apply crossplane --app-config true --db-config true
+    (
+        main apply crossplane --app-config true --db-config true
+            --provider $crossplane_provider
+            --db-config $crossplane_db_config
+    )
 
     main apply kyverno
 

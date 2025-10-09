@@ -13,7 +13,7 @@ git fetch
 FIXME: Create a branch
 
 ```sh
-git switch dapr
+# git switch dapr
 
 devbox shell
 ```
@@ -21,8 +21,12 @@ devbox shell
 FIXME: Switch to newer tags
 
 ```sh
-./dot.nu setup --dot-ai-tag 0.79.0 \
-    --qdrant-run false --qdrant-tag 0.5.0
+./dot.nu setup --dot-ai-tag 0.105.0 \
+    --qdrant-run false --qdrant-tag 0.5.0 \
+    --crossplane-provider aws \
+    --crossplane-db-config true
+
+source .env
 ```
 
 FIXME: Add to `dot.nu`
@@ -37,12 +41,6 @@ helm upgrade --install dapr dapr/dapr \
     --namespace dapr-system \
     --create-namespace \
     --wait
-```
-
-```sh
-source .env
-
-claude
 ```
 
 FIXME: Switch to dot-ai
@@ -69,6 +67,12 @@ helm upgrade --install postgresql \
     --set "global.postgresql.auth.postgresPassword=postgres" \
     --set "primary.persistence.size=1Gi" \
     --set "image.repository=bitnamilegacy/postgresql"
+
+# Deploy PostgreSQL in AWS
+# There should be database `dapr` inside PostgreSQL server and both the user and the password should be `postgres`
+# Select XRD
+
+# FIXME: Test without XRD
 
 helm upgrade --install kafka \
     oci://registry-1.docker.io/bitnamicharts/kafka \
@@ -186,7 +190,7 @@ spec:
         - containerPort: 8080
 ' | kubectl apply --filename -
 
-echo '
+echo "
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -199,9 +203,9 @@ spec:
     metadata:
       annotations:  
         dapr.io/app-id: pizza-store
-        dapr.io/app-port: "8080"
-        dapr.io/enabled: "true"
-        dapr.io/log-level: "debug"
+        dapr.io/app-port: \"8080\"
+        dapr.io/enabled: \"true\"
+        dapr.io/log-level: \"debug\"
       labels:
         app: pizza-store-service
         app.kubernetes.io/name: pizza-store-service
@@ -210,19 +214,19 @@ spec:
     spec:
       containers:
       - name: pizza-store-service
-        image: salaboy/pizza-store:1.0.1-agentic-amd64
+        image: salaboy/pizza-store:1.0.12-agentic-amd64
         imagePullPolicy: Always
         env:
         - name: SERVER_PORT
-          value: "8080"
+          value: \"8080\"
         - name: JAVA_OPTS
-          value: "-XX:+UseParallelGC -XX:ActiveProcessorCount=1 -XX:MaxRAMPercentage=75 -XX:TieredStopAtLevel=1"
+          value: \"-XX:+UseParallelGC -XX:ActiveProcessorCount=1 -XX:MaxRAMPercentage=75 -XX:TieredStopAtLevel=1\"
         - name: PUBLIC_IP
           value: localhost:8080
         - name: STATESTORE_NAME
           value: kvstore
         - name: OPENAI_API_KEY
-          value: "<YOUR OPENAI API KEY HERE>"
+          value: \"$OPENAI_API_KEY\"
         - name: DAPR_GRPC_ENDPOINT
           value: http://localhost:50001
         - name: DAPR_HTTP_ENDPOINT
@@ -237,14 +241,14 @@ spec:
             port: 8080
         resources:
           limits:
-            cpu: "1"
-            memory: "2Gi"
+            cpu: \"1\"
+            memory: \"2Gi\"
           requests:
-            cpu: "1"
-            memory: "2Gi"
+            cpu: \"1\"
+            memory: \"2Gi\"
         ports:
         - containerPort: 8080
-' | kubectl apply --filename -
+" | kubectl apply --filename -
 
 echo '
 apiVersion: v1
@@ -322,4 +326,18 @@ scopes:
 ' | kubectl apply --filename -
 
 kubectl port-forward svc/pizza-store 8080:80
+
+
+open "http://localhost:8080"
+```
+
+```sh
+source .env
+
+claude
+```
+
+[user]
+```text
+Deploy PostgreSQL in AWS
 ```
