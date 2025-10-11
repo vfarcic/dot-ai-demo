@@ -365,5 +365,7 @@ kubectl get managed
 * Wait until all managed resources are deleted.
 
 ```sh
+./dot.nu destroy
+
 exit
 ```
