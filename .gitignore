@@ -5,3 +5,4 @@ tmp/*
 tmp/sessions/*
 !tmp/sessions/empty
 qdrant_storage/
+/aws-creds.conf

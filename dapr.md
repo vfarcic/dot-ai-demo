@@ -43,37 +43,7 @@ helm upgrade --install dapr dapr/dapr \
     --wait
 ```
 
-FIXME: Switch to dot-ai
-
 ```sh
-echo "
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: pizza-init-sql
-data:
-  init.sql: |- 
-    CREATE DATABASE dapr;
-" | kubectl apply --filename -
-
-# FIXME: Fuck it up
-helm upgrade --install postgresql \
-    oci://registry-1.docker.io/bitnamicharts/postgresql \
-    --version 12.5.7 \
-    --set "image.debug=true" \
-    --set "primary.initdb.user=postgres" \
-    --set "primary.initdb.password=postgres" \
-    --set "primary.initdb.scriptsConfigMap=pizza-init-sql" \
-    --set "global.postgresql.auth.postgresPassword=postgres" \
-    --set "primary.persistence.size=1Gi" \
-    --set "image.repository=bitnamilegacy/postgresql"
-
-# Deploy PostgreSQL in AWS
-# There should be database `dapr` inside PostgreSQL server and both the user and the password should be `postgres`
-# Select XRD
-
-# FIXME: Test without XRD
-
 helm upgrade --install kafka \
     oci://registry-1.docker.io/bitnamicharts/kafka \
     --version 22.1.5 \
@@ -288,29 +258,28 @@ spec:
   version: v2
   metadata:
   - name: host
-    value: "postgresql.default.svc.cluster.local"
+    secretKeyRef:
+      name: my-db
+      key: endpoint
   - name: port
-    value: "5432"
+    secretKeyRef:
+      name: my-db
+      key: port
   - name: database
-    value: "dapr"
+    value: "my-db"
   - name: user
-    value: "postgres"
+    secretKeyRef:
+      name: my-db
+      key: username
   - name: password
-    value: "postgres"  
+    secretKeyRef:
+      name: my-db
+      key: password
   - name: timeout
     value: 10  
   - name: actorStateStore
     value: "true"
 ' | kubectl apply --filename -
-
-Note: if you want to reference a secret for the password, you can do this: https://docs.dapr.io/operations/components/component-secrets/
-
-```
-- name: password
-  secretKeyRef:
-    name: postgresql-secret
-    key: password
-```
 
 echo '
 apiVersion: dapr.io/v1alpha1
@@ -323,6 +292,18 @@ spec:
   pubsubname: pubsub
 scopes: 
 - pizza-store  
+' | kubectl apply --filename -
+
+# FIXME: Create a patern/policy that, if `SQL` is selected, `spec.secrets` values should not be specified (should not be in questions).
+
+# FIXME: Move to a pattern
+echo '
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-db-password
+data:
+  password: T1QrOXZQcDhMdXhoeFVQWVpLSk1kUG1YM04xTzBTd3YzWG5ZVjI0UFZzcz0=
 ' | kubectl apply --filename -
 
 kubectl port-forward svc/pizza-store 8080:80
@@ -341,3 +322,60 @@ claude
 ```text
 Deploy PostgreSQL in AWS
 ```
+
+[user]
+```text
+It should managed RDS, it should be be publicly accessible, and the PostgreSQL server should have database `dapr`.
+```
+
+[user]
+```text
+Select the solution with `SQL`.
+```
+
+* Answer the questions any way you like, except for the Name which must be `my-db` and the Namespace `default`, and the database name `dapr`.
+
+[user]
+```text
+Delete all the pods in the `default` Namespace.
+```
+
+FIXME: Switch to dot-ai
+
+```sh
+echo "
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pizza-init-sql
+data:
+  init.sql: |- 
+    CREATE DATABASE dapr;
+" | kubectl apply --filename -
+
+# FIXME: Fuck it up
+helm upgrade --install postgresql \
+    oci://registry-1.docker.io/bitnamicharts/postgresql \
+    --version 12.5.7 \
+    --set "image.debug=true" \
+    --set "primary.initdb.user=postgres" \
+    --set "primary.initdb.password=postgres" \
+    --set "primary.initdb.scriptsConfigMap=pizza-init-sql" \
+    --set "global.postgresql.auth.postgresPassword=postgres" \
+    --set "primary.persistence.size=1Gi" \
+    --set "image.repository=bitnamilegacy/postgresql"
+
+# Deploy PostgreSQL in AWS
+# There should be database `dapr` inside PostgreSQL server and both the user and the password should be `postgres`
+# Select XRD
+
+# FIXME: Test without XRD
+```
+
+```sh
+kubectl delete sqls my-db
+
+kubectl get managed
+```
+
+* Wait until all managed resources are deleted.

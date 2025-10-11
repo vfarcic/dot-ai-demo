@@ -6,12 +6,13 @@
     "teller@2.0.7",
     "kubernetes-helm@3.18.3",
     "nushell@0.105.1",
-    "kubectl@1.33.2"
+    "kubectl@1.33.2",
+    "postgresql@17.6"
   ],
   "shell": {
     "init_hook": [
       "export PATH=$PATH:$HOME/.npm-global/bin"
     ],
-    "scripts":   {}
+    "scripts": {}
   }
 }
