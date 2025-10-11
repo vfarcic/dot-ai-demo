@@ -353,22 +353,6 @@ data:
     CREATE DATABASE dapr;
 " | kubectl apply --filename -
 
-# FIXME: Fuck it up
-helm upgrade --install postgresql \
-    oci://registry-1.docker.io/bitnamicharts/postgresql \
-    --version 12.5.7 \
-    --set "image.debug=true" \
-    --set "primary.initdb.user=postgres" \
-    --set "primary.initdb.password=postgres" \
-    --set "primary.initdb.scriptsConfigMap=pizza-init-sql" \
-    --set "global.postgresql.auth.postgresPassword=postgres" \
-    --set "primary.persistence.size=1Gi" \
-    --set "image.repository=bitnamilegacy/postgresql"
-
-# Deploy PostgreSQL in AWS
-# There should be database `dapr` inside PostgreSQL server and both the user and the password should be `postgres`
-# Select XRD
-
 # FIXME: Test without XRD
 ```
 
@@ -379,3 +363,7 @@ kubectl get managed
 ```
 
 * Wait until all managed resources are deleted.
+
+```sh
+exit
+```
