@@ -285,13 +285,32 @@ metadata:
   name: kvstore
 spec:
   type: state.postgresql
-  version: v1
+  version: v2
   metadata:
-  - name: connectionString
-    value: "host=postgresql.default.svc.cluster.local user=postgres password=postgres port=5432 connect_timeout=10 database=dapr"
+  - name: host
+    value: "postgresql.default.svc.cluster.local"
+  - name: port
+    value: "5432"
+  - name: database
+    value: "dapr"
+  - name: user
+    value: "postgres"
+  - name: password
+    value: "postgres"  
+  - name: timeout
+    value: 10  
   - name: actorStateStore
-    value: "true"  
+    value: "true"
 ' | kubectl apply --filename -
+
+Note: if you want to reference a secret for the password, you can do this: https://docs.dapr.io/operations/components/component-secrets/
+
+```
+- name: password
+  secretKeyRef:
+    name: postgresql-secret
+    key: password
+```
 
 echo '
 apiVersion: dapr.io/v1alpha1
@@ -307,6 +326,7 @@ scopes:
 ' | kubectl apply --filename -
 
 kubectl port-forward svc/pizza-store 8080:80
+
 
 open "http://localhost:8080"
 ```
