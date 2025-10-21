@@ -87,8 +87,8 @@ def "main setup" [
         (
             helm install dot-ai-mcp
                 $"oci://ghcr.io/vfarcic/dot-ai/charts/dot-ai:($dot_ai_tag)"
-                --set $"secrets.anthropic.apiKey='($anthropic_data.token)'"
-                --set $"secrets.openai.apiKey='($openai_key)'"
+                --set $"secrets.anthropic.apiKey=($anthropic_data.token)"
+                --set $"secrets.openai.apiKey=($openai_key)"
                 --set ingress.enabled=true
                 --set ingress.host="dot-ai.127.0.0.1.nip.io"
                 --create-namespace
