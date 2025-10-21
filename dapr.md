@@ -318,6 +318,8 @@ source .env
 claude
 ```
 
+FIXME: Switch to pub/sub
+
 [user]
 ```text
 Deploy PostgreSQL in AWS
@@ -325,7 +327,7 @@ Deploy PostgreSQL in AWS
 
 [user]
 ```text
-It should managed RDS, it should be be publicly accessible, and the PostgreSQL server should have database `dapr`.
+It should be managed RDS, it should be be publicly accessible, and the PostgreSQL server should have database `dapr`.
 ```
 
 [user]

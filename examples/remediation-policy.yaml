@@ -1,0 +1,31 @@
+apiVersion: dot-ai.devopstoolkit.live/v1alpha1
+kind: RemediationPolicy
+metadata:
+  name: sample-policy
+  namespace: dot-ai
+spec:
+  eventSelectors:
+    - type: Warning
+      reason: FailedScheduling
+      involvedObjectKind: Pod
+      mode: automatic
+      confidenceThreshold: 0.85
+      maxRiskLevel: medium
+    - type: Warning
+      reason: ""
+      involvedObjectKind: ""
+  
+  mcpEndpoint: http://dot-ai-mcp.dot-ai.svc.cluster.local:3456/api/v1/tools/remediate
+  mcpTool: remediate
+  mode: manual
+  maxRiskLevel: low
+  rateLimiting:
+    eventsPerMinute: 5
+    cooldownMinutes: 15
+  # notifications:
+  #   slack:
+  #     enabled: false
+  #     webhookUrl: "$SLACK_WEBHOOK_URL"
+  #     channel: "#tests"
+  #     notifyOnStart: true
+  #     notifyOnComplete: true
