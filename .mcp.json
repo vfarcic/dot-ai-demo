@@ -3,14 +3,17 @@
     "dot-ai": {
       "command": "docker",
       "args": [
-        "compose", 
+        "compose",
         "-f",
         "docker-compose-dot-ai.yaml",
-        "run", 
+        "run",
         "--rm",
         "--remove-orphans",
         "dot-ai"
-      ]
+      ],
+      "env": {
+        "AI_PROVIDER": "anthropic_haiku"
+      }
     }
   }
 }
