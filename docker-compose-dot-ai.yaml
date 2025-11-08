@@ -10,12 +10,15 @@ services:
     environment:
       # Required: Anthropic API key for AI analysis
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      # Model provider
+      AI_PROVIDER: ${AI_PROVIDER:-anthropic_haiku}
       # Qdrant connection (localhost since using host networking)
       QDRANT_URL: http://localhost:${QDRANT_PORT:-6333}
       # Optional: OpenAI API key for enhanced semantic search
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       # Kubernetes configuration
       KUBECONFIG: /root/.kube/config
+      DEBUG_DOT_AI: true
     volumes:
       # Mount kubeconfig - uses standard KUBECONFIG environment variable
       - ${KUBECONFIG:-~/.kube/config}:/root/.kube/config:ro
@@ -28,14 +31,8 @@ services:
     container_name: ${QDRANT_NAME:-qdrant}
     ports:
       - "${QDRANT_PORT:-6333}:6333"
-    volumes:
-      - qdrant_data:/qdrant/storage
     networks:
       - dot-ai-network
-
-volumes:
-  qdrant_data:
-    name: ${QDRANT_NAME:-qdrant}-data
 
 networks:
   dot-ai-network:
