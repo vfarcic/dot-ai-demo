@@ -39,10 +39,13 @@ def "main setup" [
         $openai_key = $value
     }
 
+    let dot_ai_auth_token = "dot-ai-rocks"
+
     let qdrant_image = $"ghcr.io/vfarcic/dot-ai-demo/qdrant:($qdrant_tag)"
     let dot_ai_image = $"ghcr.io/vfarcic/dot-ai:($dot_ai_tag)"
 
     $"export OPENAI_API_KEY=($openai_key)\n" | save --append .env
+    $"export DOT_AI_AUTH_TOKEN=($dot_ai_auth_token)\n" | save --append .env
     $"export QDRANT_IMAGE=($qdrant_image)\n" | save --append .env
     $"export DOT_AI_IMAGE=($dot_ai_image)\n" | save --append .env
 
@@ -89,6 +92,7 @@ def "main setup" [
                 $"oci://ghcr.io/vfarcic/dot-ai/charts/dot-ai:($dot_ai_tag)"
                 --set $"secrets.anthropic.apiKey=($anthropic_data.token)"
                 --set $"secrets.openai.apiKey=($openai_key)"
+                --set $"secrets.auth.token=($dot_ai_auth_token)"
                 --set ingress.enabled=true
                 --set ingress.host="dot-ai.127.0.0.1.nip.io"
                 --create-namespace
