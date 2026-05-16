@@ -17,6 +17,9 @@ spec:
   
   mcpEndpoint: http://dot-ai-mcp.dot-ai.svc.cluster.local:3456/api/v1/tools/remediate
   mcpTool: remediate
+  mcpAuthSecretRef:
+    name: dot-ai-secrets
+    key: auth-token
   mode: manual
   maxRiskLevel: low
   rateLimiting:
